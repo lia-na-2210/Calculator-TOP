@@ -13,9 +13,6 @@ function calculator() {
         const keyValue = key.textContent;
         const type = event.target.parentElement.id;
         
-
-        
-    
         if(lastKey == 'empty') {
             display.textContent = '';
         }
@@ -44,8 +41,18 @@ function calculator() {
         }
     
         if (type == 'equal') {
-            display.textContent = enter(m1, m2, operator);
-
+            if (m2.length == 0) {
+                return
+            }
+            const solution = enter(m1, m2, operator);
+            if (solution % 1 == 0) {
+                display.textContent = solution;
+                console.log('00')
+            } else {
+               display.textContent = solution.toFixed(2); 
+               console.log('no 00')
+            }
+            lastKey = 'number';
         }
 
         if (type == 'clear') {
@@ -55,14 +62,36 @@ function calculator() {
             m2.length = 0;
             operator = undefined;
         }
-    
+
+        if(type == 'delete') {
+            if (lastKey == 'number') {
+                const monitor = Array.from(display.textContent);
+                monitor.pop();
+                display.textContent = monitor.join('');
+            } else if (lastKey == 'operator') {
+                const monitor = Array.from(display.textContent);
+                monitor.pop();
+                display.textContent = monitor.join('');
+                m1.length = 0;
+                operator = undefined;
+                lastKey = 'number'
+            } else if (lastKey == 'number2'){
+                m2.pop();
+                display.textContent = m1.join('') + operator +m2.join('');
+            } else {
+                display.textContent = '0';
+                return
+            }
+
+            
+
+        }
     
     })
     
 }
 
 function enter(m1, m2, operator) {
-    console.log(m1)
     const firstNumber = m1.join('');
     const secondNumber = m2.join('');
     const operation = operator;
@@ -72,14 +101,13 @@ function enter(m1, m2, operator) {
     m1.length = 0;
     m2.length = 0;
     operator = undefined;
-    lastKey = 'number'
-
+    
     return solution
 }
 
 function math(first, second, operation) {
-    const firstNumber = parseFloat(first).toFixed(2);
-    const secondNumber = parseFloat(second).toFixed(2);
+    const firstNumber = parseFloat(first);
+    const secondNumber = parseFloat(second);
 
     if(firstNumber == '0' && operation == '/') {
         return 'Error';

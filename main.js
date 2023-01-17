@@ -21,13 +21,10 @@ function calculator() {
             if (lastKey == 'operator' || lastKey == 'number2') {
                 lastKey = 'number2';
                 display.textContent += keyValue;
-                m2.push(keyValue);
-                console.log('second number')
-                
+                m2.push(keyValue);              
             } else{
                 lastKey = 'number'
                 display.textContent += keyValue;
-                console.log('first number')
             }; 
             
         }
@@ -76,6 +73,21 @@ function calculator() {
         }
 
         if(type == 'delete') {
+            console.log(lastKey)
+            const monitor = display.textContent;
+            
+            if (monitor.length == 1 && lastKey == 'number') {
+                display.textContent = '0';
+                lastKey = 'empty';
+
+                return
+            }
+            
+            if (m2.length == 0 && lastKey == 'number2') {
+                lastKey = 'operator'
+                return
+            }
+
             if (lastKey == 'number') {
                 const monitor = Array.from(display.textContent);
                 monitor.pop();
@@ -90,13 +102,11 @@ function calculator() {
             } else if (lastKey == 'number2'){
                 m2.pop();
                 display.textContent = m1.join('') + operator +m2.join('');
-            } else {
+            } else if (lastKey == 'empty') {
                 display.textContent = '0';
+                lastKey = 'empty';
                 return
             }
-
-            
-
         }
     
     })

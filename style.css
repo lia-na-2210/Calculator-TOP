@@ -95,7 +95,7 @@ button:active {
     color: white;
 }
 
-#op {
+.op {
     background-color: rgb(197, 33, 33);
     color: white;
 }

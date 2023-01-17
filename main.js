@@ -11,7 +11,7 @@ function calculator() {
     keys.addEventListener('click', event => {
         const key = event.target;
         const keyValue = key.textContent;
-        const type = event.target.parentElement.id;
+        const type = event.target.id;
         
         if(lastKey == 'empty') {
             display.textContent = '';
@@ -20,12 +20,14 @@ function calculator() {
         if (type == 'number') {
             if (lastKey == 'operator' || lastKey == 'number2') {
                 lastKey = 'number2';
-                display.textContent += keyValue
+                display.textContent += keyValue;
                 m2.push(keyValue);
+                console.log('second number')
                 
             } else{
                 lastKey = 'number'
-                display.textContent += keyValue
+                display.textContent += keyValue;
+                console.log('first number')
             }; 
             
         }
@@ -33,26 +35,36 @@ function calculator() {
         if (type == 'operator') {
             if (lastKey == 'number2') {
                 display.textContent = enter(m1, m2, operator);
+            } else if (lastKey == 'number') {
+                lastKey = 'operator'
+                m1.push(display.textContent)
+                operator = keyValue
+                display.textContent += keyValue;
+            } else {
+                return
             }
-            lastKey = 'operator'
-            m1.push(display.textContent)
-            operator = keyValue
-            display.textContent += keyValue;
+            
         }
     
         if (type == 'equal') {
-            if (m2.length == 0) {
+            console.log(lastKey)
+            if (lastKey == 'empty' || lastKey == 'operator') {
+                display.textContent = '0'
                 return
-            }
-            const solution = enter(m1, m2, operator);
-            if (solution % 1 == 0) {
-                display.textContent = solution;
-                console.log('00')
+            } else if(lastKey == 'number') {
+                return
             } else {
-               display.textContent = solution.toFixed(2); 
-               console.log('no 00')
+                const solution = enter(m1, m2, operator);
+                if (solution % 1 == 0) {
+                    display.textContent = solution;
+                lastKey = 'number';
+                } else {
+                    display.textContent = solution.toFixed(2); 
+                    lastKey = 'number';
+                }
             }
-            lastKey = 'number';
+            
+            
         }
 
         if (type == 'clear') {
